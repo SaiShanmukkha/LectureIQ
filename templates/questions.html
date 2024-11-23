@@ -1,0 +1,18 @@
+<!-- templates/print_pdf.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Questions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Generated Questions</h1>
+    <form method="post" action="/save_questions">
+        <textarea name="questions">{{ questions }}</textarea>
+        <br><br>
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,148 @@
+{
+    "from": "2024-06-27",
+    "to": "2024-07-27",
+    "page_count": 1,
+    "page_size": 30,
+    "total_records": 2,
+    "next_page_token": "",
+    "meetings": [
+      {
+        "uuid": "wXM8HHphRXGLqUOW4jjakA==",
+        "id": 82133556418,
+        "account_id": "8OtwxH2GQiWnyqGlvzk2Ig",
+        "host_id": "Y_xZKDBSTFiEV-tGqdlFDg",
+        "topic": "Ganesh Gaiy's Zoom Meeting",
+        "type": 1,
+        "start_time": "2024-07-10T16:40:31Z",
+        "timezone": "",
+        "duration": 2,
+        "total_size": 6073056,
+        "recording_count": 4,
+        "share_url": "https://us06web.zoom.us/rec/share/p4UtPnnI0_xkFlIKjAXIOLFqFduA3g4YSvEy5XSavsApG6OjOuUkrJyWg2EFAPk.Ml0Q4zJ1RVye3Bus",
+        "recording_files": [
+          {
+            "id": "4b689946-a979-4a92-a0f4-83b7406d9300",
+            "meeting_id": "wXM8HHphRXGLqUOW4jjakA==",
+            "recording_start": "2024-07-10T16:41:43Z",
+            "recording_end": "2024-07-10T16:43:46Z",
+            "file_type": "MP4",
+            "file_extension": "MP4",
+            "file_size": 4085249,
+            "play_url": "https://us06web.zoom.us/rec/play/Nrvi8yE-jh4XT6p4eYL01mlWcJW0I1Kj--s8E4g6dZdT4m_vRG-vSADlLbjX60n3ZPcrq-djy0vFCw7r.A5LxKFgawhry0eFr",
+            "download_url": "https://us06web.zoom.us/rec/download/Nrvi8yE-jh4XT6p4eYL01mlWcJW0I1Kj--s8E4g6dZdT4m_vRG-vSADlLbjX60n3ZPcrq-djy0vFCw7r.A5LxKFgawhry0eFr",
+            "status": "completed",
+            "recording_type": "shared_screen_with_speaker_view"
+          },
+          {
+            "id": "b285e2ce-c4eb-4829-98af-210810bed67d",
+            "meeting_id": "wXM8HHphRXGLqUOW4jjakA==",
+            "recording_start": "2024-07-10T16:41:43Z",
+            "recording_end": "2024-07-10T16:43:46Z",
+            "file_type": "M4A",
+            "file_extension": "M4A",
+            "file_size": 1952188,
+            "play_url": "https://us06web.zoom.us/rec/play/5ojgO3IXOoQKYY1TKP6LuKrG_GurAogsFkVl6lVK2sMnF3Sw1USI28h4bnrjibTt7t1k8w-jo21Q8lCU.olF3nNmxA-jrx78e",
+            "download_url": "https://us06web.zoom.us/rec/download/5ojgO3IXOoQKYY1TKP6LuKrG_GurAogsFkVl6lVK2sMnF3Sw1USI28h4bnrjibTt7t1k8w-jo21Q8lCU.olF3nNmxA-jrx78e",
+            "status": "completed",
+            "recording_type": "audio_only"
+          },
+          {
+            "id": "14201391-4917-494b-8dd3-02de910ed978",
+            "meeting_id": "wXM8HHphRXGLqUOW4jjakA==",
+            "recording_start": "2024-07-10T16:41:43Z",
+            "recording_end": "2024-07-10T16:43:46Z",
+            "file_type": "TIMELINE",
+            "file_extension": "JSON",
+            "file_size": 33003,
+            "download_url": "https://us06web.zoom.us/rec/download/15zgfS5YEpGcHQtMnPBFNqHBfqfZb9E1gBpyR_9pGWt6Oep0NMNcGiHYG3oktOEeH77W-IOUV-rr86IW.aimOSB5MTZl1zvRZ",
+            "status": "completed",
+            "recording_type": "timeline"
+          },
+          {
+            "id": "c09b9518-80d8-4ff1-9a85-a70ebfe11cd8",
+            "meeting_id": "wXM8HHphRXGLqUOW4jjakA==",
+            "recording_start": "2024-07-10T16:41:43Z",
+            "recording_end": "2024-07-10T16:43:46Z",
+            "file_type": "TRANSCRIPT",
+            "file_extension": "VTT",
+            "file_size": 2616,
+            "play_url": "https://us06web.zoom.us/rec/play/ofcmmh_nwEufq7TFBMjr4CKpapeuBxKtT1MlGF-kvUbi2YqGtkFauhUJvwuBfSShUXnWXNkq1zE1vzuT.6o3TBmSDtUbwlpzO",
+            "download_url": "https://us06web.zoom.us/rec/download/ofcmmh_nwEufq7TFBMjr4CKpapeuBxKtT1MlGF-kvUbi2YqGtkFauhUJvwuBfSShUXnWXNkq1zE1vzuT.6o3TBmSDtUbwlpzO",
+            "status": "completed",
+            "recording_type": "audio_transcript"
+          }
+        ],
+        "recording_play_passcode": "5Ssz09gwUWl_0LbNbraEaM6cighE99OM"
+      },
+      {
+        "uuid": "c9b3FXI6RhaVe0ft6RddWA==",
+        "id": 83297769247,
+        "account_id": "8OtwxH2GQiWnyqGlvzk2Ig",
+        "host_id": "Y_xZKDBSTFiEV-tGqdlFDg",
+        "topic": "Ganesh Gaiy's Zoom Meeting",
+        "type": 1,
+        "start_time": "2024-07-10T16:38:09Z",
+        "timezone": "",
+        "duration": 0,
+        "total_size": 1213647,
+        "recording_count": 4,
+        "share_url": "https://us06web.zoom.us/rec/share/RlhGyLU33zjqYOPP1Xx0KYlVDU5whj-riu20VWwoHgJYz3o5_Mrrf3tYd4dFG1F2.WVcoNd8YGX55-6oJ",
+        "recording_files": [
+          {
+            "id": "0e4222a3-8400-471e-b58c-58328592c5e2",
+            "meeting_id": "c9b3FXI6RhaVe0ft6RddWA==",
+            "recording_start": "2024-07-10T16:38:44Z",
+            "recording_end": "2024-07-10T16:39:04Z",
+            "file_type": "MP4",
+            "file_extension": "MP4",
+            "file_size": 884869,
+            "play_url": "https://us06web.zoom.us/rec/play/r2t_ZEgfYX7rpThLXZVmkSSKW1aunVj64bw-24hA3yHZ13himIMBtlemiqKSWcqMVShnfHD3I-2Odf1H.4mmy1DPGZM45qQ1c",
+            "download_url": "https://us06web.zoom.us/rec/download/r2t_ZEgfYX7rpThLXZVmkSSKW1aunVj64bw-24hA3yHZ13himIMBtlemiqKSWcqMVShnfHD3I-2Odf1H.4mmy1DPGZM45qQ1c",
+            "status": "completed",
+            "recording_type": "shared_screen_with_speaker_view"
+          },
+          {
+            "id": "b429c1f6-67dc-41aa-914e-572655d4bcc8",
+            "meeting_id": "c9b3FXI6RhaVe0ft6RddWA==",
+            "recording_start": "2024-07-10T16:38:44Z",
+            "recording_end": "2024-07-10T16:39:04Z",
+            "file_type": "TRANSCRIPT",
+            "file_extension": "VTT",
+            "file_size": 191,
+            "play_url": "https://us06web.zoom.us/rec/play/K6W-yyX7oF2XMq_mIlNsRj_1NJ_qQG1fwGk4v5Ty26kx9JkdCSchOFFeD9uHFJuoYNmDK7N44nvCtWDd.zUw3OsGZDJjnPPLX",
+            "download_url": "https://us06web.zoom.us/rec/download/K6W-yyX7oF2XMq_mIlNsRj_1NJ_qQG1fwGk4v5Ty26kx9JkdCSchOFFeD9uHFJuoYNmDK7N44nvCtWDd.zUw3OsGZDJjnPPLX",
+            "status": "completed",
+            "recording_type": "audio_transcript"
+          },
+          {
+            "id": "f78d3baf-f081-4c73-a4a2-c4a15f4b5f81",
+            "meeting_id": "c9b3FXI6RhaVe0ft6RddWA==",
+            "recording_start": "2024-07-10T16:38:44Z",
+            "recording_end": "2024-07-10T16:39:04Z",
+            "file_type": "M4A",
+            "file_extension": "M4A",
+            "file_size": 324624,
+            "play_url": "https://us06web.zoom.us/rec/play/jkQTK9d14JXklHgfYwVeZqE0dM-2b003jZOc6jyMe5M0zGhbguOq0wN6hzEwl_PQ0NZmNVO3JsnEAlMq.r6LvsZjckquG3Os5",
+            "download_url": "https://us06web.zoom.us/rec/download/jkQTK9d14JXklHgfYwVeZqE0dM-2b003jZOc6jyMe5M0zGhbguOq0wN6hzEwl_PQ0NZmNVO3JsnEAlMq.r6LvsZjckquG3Os5",
+            "status": "completed",
+            "recording_type": "audio_only"
+          },
+          {
+            "id": "a8843022-8731-4e04-bb92-e8396cfad9a0",
+            "meeting_id": "c9b3FXI6RhaVe0ft6RddWA==",
+            "recording_start": "2024-07-10T16:38:44Z",
+            "recording_end": "2024-07-10T16:39:04Z",
+            "file_type": "TIMELINE",
+            "file_extension": "JSON",
+            "file_size": 3963,
+            "download_url": "https://us06web.zoom.us/rec/download/LxpilpXJRDh1NGD46m6s6vF8QL4CcRpCs89xI1fMNFf6qo57nxkeuvPtN1Lcr7ddK_G5He0EwCAYTa5m.On5YHsqaupeFwRXI",
+            "status": "completed",
+            "recording_type": "timeline"
+          }
+        ],
+        "recording_play_passcode": "kG5zkNm_1tVZTbLPErVWsJdcTZKPwdqx"
+      }
+    ]
+  }
+
+  

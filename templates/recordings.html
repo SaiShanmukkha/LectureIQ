@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LectureIQ</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">LectureIQ</div>
+    </header>
+    <main>
+        <!-- <a href="{{ url_for('login') }}" class="connect-btn">Connect Zoom Account</a> -->
+        <div class="container">
+            <h1>Zoom Recordings Gallery</h1>
+            <div class="gallery">
+                {% for meeting in meetings %}
+                    {% for recording in meeting["recording_files"] %}
+                        {% if recording.get("file_type") == "MP4" %}
+                            <div class="gallery-item">
+                                <form action="/getAudioTranscript" method="get">
+                                    <input type="hidden" name="meeting_id" value="{{ recording.meeting_id }}">
+                                    <a href="#" onclick="this.closest('form').submit(); return false;">
+                                        <img src="{{ url_for('static', filename='video-marketing.png') }}" alt="Thumbnail">
+                                    </a>
+                                </form>
+                                <div class="info">
+                                    <p><strong>Recording Start:</strong> {{ recording.recording_start }}</p>
+                                    <p><strong>Recording End:</strong> {{ recording.recording_end }}</p>
+                                    <p><strong>File Type:</strong> {{ recording.file_type }}</p>
+                                    <p><strong>File Size:</strong> {{ recording.file_size }} bytes</p>
+                                    <p><a href="{{ recording.play_url }}" target="_blank">Play</a></p>
+                                    <p><a href="{{ recording.download_url }}" target="_blank">Download</a></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>

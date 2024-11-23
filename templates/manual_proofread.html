@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Proofread</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">Manual Proofread</div>
+    </header>
+    <main>
+        <div class="proofread-container">
+            <div class="transcript-section read-only">
+                <h2>Expertly Proofread Transcript</h2>
+                <pre>{{ transcript }}</pre>
+            </div>
+            <div class="transcript-section">
+                <h2>Edit Transcript</h2>
+                <textarea id="editableTranscript">{{ transcript }}</textarea>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <button id="skipButton" onclick="skipTranscript()">Skip</button>
+        <button id="generateButton" onclick="generateQuestions()" disabled>Generate Questions</button>
+    </footer>
+
+    <script>
+        const editableTranscript = document.getElementById('editableTranscript');
+        const generateButton = document.getElementById('generateButton');
+        // @ts-ignore
+        const originalTranscript = {{ transcript|tojson|safe }};
+
+        editableTranscript.addEventListener('input', function() {
+            generateButton.disabled = false;
+        });
+
+        function skipTranscript() {
+            fetch('{{ url_for("generate_questions") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ transcript: originalTranscript })
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = '{{ url_for("print_pdf") }}'; // Redirect to the next page
+                }
+            });
+        }
+
+        function generateQuestions() {
+            const editedTranscript = editableTranscript.value;
+            fetch('{{ url_for("generate_questions") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ transcript: editedTranscript })
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = '{{ url_for("print_pdf") }}'; // Redirect to the next page
+                }
+            });
+        }
+    </script>
+</body>
+</html>
