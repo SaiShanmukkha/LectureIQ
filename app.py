@@ -3,62 +3,70 @@ from dotenv import load_dotenv
 import os, urllib, requests, logging
 from datetime import datetime
 import whisper
-from langchain_openai import ChatOpenAI
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain.prompts import ChatPromptTemplate
-from langchain.chains import LLMChain
-from langchain_core.messages import HumanMessage
+# import llama_index
+from llama_index import (
+    VectorStoreIndex,
+    Document,
+    ServiceContext,
+    LLMPredictor,
+)
+from llama_index.llms import OpenAI
 
 load_dotenv()
 
 app = Flask(__name__)
-
-
 app.secret_key = os.getenv('SECRET_KEY')
 os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_SECRET_KEY')
 ZOOM_OAUTH_AUTHORIZE_API = 'https://zoom.us/oauth/authorize?'
 ZOOM_TOKEN_API = 'https://zoom.us/oauth/token'
 
-chat = ChatOpenAI(temperature=0.0, model="gpt-4o")
+# Initialize LlamaIndex components
+llm_predictor = LLMPredictor(llm=OpenAI(temperature=0.0, model="gpt-4"))
+service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
 
-system_template = "You are now an expert transcript proofreader who has proof read many english texts\
-                    written by both native and non-native english speakers. You will only give me proof read text."
-
-system_role_questions = "you are now an expert at creating questions from given text such that these questions\
-      will test students on the core concept of the text. You will consider this entire text and generate questions from this text."
-
-text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=2000,
-    chunk_overlap=200,
-    length_function=len
-)
-
-prompt = ChatPromptTemplate.from_messages([
-    ("system", system_template),
-    ("user", "{text}")
-])
-
-question_prompt = ChatPromptTemplate.from_messages([
-    ("system", system_role_questions),
-    ("user", "{transcript}")
-])
-
-expert_proofread_chain = prompt | chat
-question_chain = question_prompt | chat
 def expert_proofread_large_transcript(transcript):
+    # Create a Document object with the transcript text
+    document = Document(text=transcript)
     
-    chunks = text_splitter.split_text(transcript)
+    # Initialize the index with the document
+    index = VectorStoreIndex.from_documents([document], service_context=service_context)
     
+    # Create a query engine
+    query_engine = index.as_query_engine()
     
-    proofread_chunks = []
-    for chunk in chunks:
-        human_message = HumanMessage(content=chunk)
-        result = expert_proofread_chain.invoke([human_message])
-        proofread_chunks.append(result.content)
+    # Define the proofreading prompt
+    proofreading_prompt = (
+        "You are an expert transcript proofreader who has proofread many English texts "
+        "written by both native and non-native English speakers. Please proofread the following text:\n\n"
+        "{text}"
+    )
     
+    # Execute the query with the proofreading prompt
+    response = query_engine.query(proofreading_prompt.format(text=transcript))
     
-    return " ".join(proofread_chunks)
+    return response.response
 
+def generate_questions_from_transcript(transcript):
+    # Create a Document object with the transcript text
+    document = Document(text=transcript)
+    
+    # Initialize the index with the document
+    index = VectorStoreIndex.from_documents([document], service_context=service_context)
+    
+    # Create a query engine
+    query_engine = index.as_query_engine()
+    
+    # Define the question generation prompt
+    question_prompt = (
+        "You are an expert at creating questions from given text to test students on the core concepts. "
+        "Please generate questions from the following text:\n\n"
+        "{text}"
+    )
+    
+    # Execute the query with the question generation prompt
+    response = query_engine.query(question_prompt.format(text=transcript))
+    
+    return response.response
 
 @app.route('/')
 def home():
@@ -91,10 +99,7 @@ def recordings():
         headers['Authorization'] = f'Bearer {access_token}'
         user_info = requests.get('https://api.zoom.us/v2/users/me', headers=headers)
         
-    print(user_info)
     user_info_json = user_info.json()
-    
-
     user_id = user_info_json['id']
     current_date = datetime.now().strftime('%Y-%m-%d')
     params = {
@@ -134,15 +139,7 @@ def refresh_token():
 
 @app.route('/authorize')
 def get_token():
-    
-
     code = request.args.get('code')
-    
-    
-    
-    
-    
-
     client_auth = requests.auth.HTTPBasicAuth(os.getenv("CLIENT_ID"), os.getenv("CLIENT_SECRET"))
     app.logger.debug(f'client ID is: {client_auth}')
     post_data = {"grant_type": "authorization_code",
@@ -152,11 +149,7 @@ def get_token():
     token_response = requests.post("https://zoom.us/oauth/token",
                              auth=client_auth,
                              data=post_data)
-    
-
-    print(token_response)
     if token_response.status_code != 200:
-        
         return f"Failed to get token: {token_response.text}"
     
     try:
@@ -165,9 +158,7 @@ def get_token():
         return "Failed to decode token response"
     
     session["token"] = token_json
-    
     return redirect(url_for('recordings'))
-
 
 @app.route("/uploadLocalFile", methods=['GET'])
 def uploadLocalFile():
@@ -196,21 +187,16 @@ def getTranscript():
     expertly_proofread_transcript = ''
     recording_files = recordings_json['recording_files']
     for file in recording_files:
-        if file.get('file_type')=="M4A":
-            print("********",file.get("download_url"))
+        if file.get('file_type') == "M4A":
             download_link = f'{file.get("download_url")}?access_token={token["access_token"]}&playback_access_token={recordings_json.get("recording_play_passcode")}'
-            local_file = download_audio_file(download_link, "local_file.m4a") 
+            local_file = download_audio_file(download_link, "local_file.m4a")
             model = whisper.load_model("base")
             result = model.transcribe(local_file)
-            with open("result.txt", 'w') as f:
-                f.write(result["text"])
-            
             transcript = result["text"]
             expertly_proofread_transcript = expert_proofread_large_transcript(transcript)
-            app.logger.debug(f'transcribe text is {expertly_proofread_transcript}')
+            app.logger.debug(f'Transcribed text: {expertly_proofread_transcript}')
             session['proofread_transcript'] = expertly_proofread_transcript
     return redirect(url_for('manual_proofread'))
-            
 
 def download_audio_file(url, local_filename):
     headers = {
@@ -231,12 +217,6 @@ def download_audio_file(url, local_filename):
 
 @app.route('/generate_questions', methods=['POST'])
 def generate_questions():
-    
-    
-    
-    
-    
-    
     data = request.get_json()
     if not data or 'transcript' not in data:
         app.logger.debug('No transcript data received')
@@ -244,12 +224,11 @@ def generate_questions():
 
     transcript = data['transcript']
     app.logger.debug(f'Transcript received: {transcript}')
-    human_msg = HumanMessage(content=transcript)
-    result = question_chain.invoke([human_msg])
-    app.logger.debug(f'Result is: {result}')
+    questions = generate_questions_from_transcript(transcript)
+    app.logger.debug(f'Generated questions: {questions}')
     
-    session["questions"] = result.content
-    return {'questions': result.content}, 200 
+    session["questions"] = questions
+    return {'questions': questions}, 200
 
 @app.route('/print_pdf')
 def print_pdf():
@@ -263,6 +242,7 @@ def manual_proofread():
         return render_template("manual_proofread.html", transcript=proofread_transcript)
     return redirect(url_for('getAudioTranscript'))
 
-
 if __name__ == '__main__':
     app.run(debug=True)
+
+ 
