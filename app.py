@@ -4,13 +4,16 @@ import os, urllib, requests, logging
 from datetime import datetime
 import whisper
 # import llama_index
-from llama_index import (
-    VectorStoreIndex,
-    Document,
-    ServiceContext,
-    LLMPredictor,
-)
-from llama_index.llms import OpenAI
+# from llama_index import (
+#     VectorStoreIndex,
+#     Document,
+#     ServiceContext,
+#     LLMPredictor,
+# )
+from llama_index.core import VectorStoreIndex
+from llama_index.core import Document
+from llama_index.core import Settings
+from llama_index.llms.openai import OpenAI
 
 load_dotenv()
 
@@ -21,15 +24,16 @@ ZOOM_OAUTH_AUTHORIZE_API = 'https://zoom.us/oauth/authorize?'
 ZOOM_TOKEN_API = 'https://zoom.us/oauth/token'
 
 # Initialize LlamaIndex components
-llm_predictor = LLMPredictor(llm=OpenAI(temperature=0.0, model="gpt-4"))
-service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
+# llm_predictor = LLMPredictor(llm=OpenAI(temperature=0.0, model="gpt-4"))
+# service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
+Settings.llm = OpenAI(temperature=0.2, model="gpt-4")
 
 def expert_proofread_large_transcript(transcript):
     # Create a Document object with the transcript text
     document = Document(text=transcript)
     
     # Initialize the index with the document
-    index = VectorStoreIndex.from_documents([document], service_context=service_context)
+    index = VectorStoreIndex.from_documents([document])
     
     # Create a query engine
     query_engine = index.as_query_engine()
@@ -51,7 +55,7 @@ def generate_questions_from_transcript(transcript):
     document = Document(text=transcript)
     
     # Initialize the index with the document
-    index = VectorStoreIndex.from_documents([document], service_context=service_context)
+    index = VectorStoreIndex.from_documents([document])
     
     # Create a query engine
     query_engine = index.as_query_engine()
