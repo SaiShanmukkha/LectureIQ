@@ -24,7 +24,7 @@
     </main>
     <footer>
         <button id="skipButton" onclick="skipTranscript()">Skip</button>
-        <button id="chatButton" onclick="generateQuestions()" disabled>Chat</button>
+        <button id="chatButton" onclick="generateQuestions()" disabled>Generate Questions</button>
     </footer>
 
     <script>
@@ -38,7 +38,7 @@
         });
 
         function skipTranscript() {
-            fetch('{{ url_for("generate_questions") }}', {
+            fetch('{{ url_for("chat_with_context") }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
