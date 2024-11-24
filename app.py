@@ -14,14 +14,25 @@ from llama_index.core import VectorStoreIndex
 from llama_index.core import Document
 from llama_index.core import Settings
 from llama_index.llms.openai import OpenAI
+from groq import Groq
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
-os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_SECRET_KEY')
+# os.environ["OPENAI_SECRET_KEY"] = os.getenv('OPENAI_SECRET_KEY')
+openai_secret_key = os.getenv('OPENAI_SECRET_KEY')
+if openai_secret_key is not None:
+    os.environ["OPENAI_API_KEY"] = openai_secret_key
+else:
+    raise ValueError("OPENAI_SECRET_KEY environment variable is not set.")
+
 ZOOM_OAUTH_AUTHORIZE_API = 'https://zoom.us/oauth/authorize?'
 ZOOM_TOKEN_API = 'https://zoom.us/oauth/token'
+
+client = Groq(
+    api_key=os.environ.get("GROQ_API_KEY"),
+)
 
 # Initialize LlamaIndex components
 # llm_predictor = LLMPredictor(llm=OpenAI(temperature=0.0, model="gpt-4"))
@@ -219,8 +230,24 @@ def download_audio_file(url, local_filename):
                 f.write(chunk)
     return local_filename
 
-@app.route('/generate_questions', methods=['POST'])
-def generate_questions():
+# @app.route('/chat_with_context', methods=['POST'])
+# def generate_questions():
+#     data = request.get_json()
+#     if not data or 'transcript' not in data:
+#         app.logger.debug('No transcript data received')
+#         return 'Bad Request', 400
+
+#     transcript = data['transcript']
+#     app.logger.debug(f'Transcript received: {transcript}')
+#     questions = generate_questions_from_transcript(transcript)
+#     app.logger.debug(f'Generated questions: {questions}')
+    
+#     session["questions"] = questions
+#     return {'questions': questions}, 200
+
+
+@app.route('/chat_with_context', methods=['POST'])
+def chat_with_context():
     data = request.get_json()
     if not data or 'transcript' not in data:
         app.logger.debug('No transcript data received')

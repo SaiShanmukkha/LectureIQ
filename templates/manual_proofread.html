@@ -24,17 +24,17 @@
     </main>
     <footer>
         <button id="skipButton" onclick="skipTranscript()">Skip</button>
-        <button id="generateButton" onclick="generateQuestions()" disabled>Generate Questions</button>
+        <button id="chatButton" onclick="generateQuestions()" disabled>Chat</button>
     </footer>
 
     <script>
         const editableTranscript = document.getElementById('editableTranscript');
-        const generateButton = document.getElementById('generateButton');
+        const chatButton = document.getElementById('chatButton');
         // @ts-ignore
         const originalTranscript = {{ transcript|tojson|safe }};
 
         editableTranscript.addEventListener('input', function() {
-            generateButton.disabled = false;
+            chatButton.disabled = false;
         });
 
         function skipTranscript() {
@@ -53,7 +53,7 @@
 
         function generateQuestions() {
             const editedTranscript = editableTranscript.value;
-            fetch('{{ url_for("generate_questions") }}', {
+            fetch('{{ url_for("chat_with_context") }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
