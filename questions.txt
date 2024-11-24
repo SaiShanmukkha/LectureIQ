@@ -1,0 +1,12 @@
+Here are some questions based on the given text:
+
+1. What is the name of the application being presented in the video?
+2. Which two technologies are used to build the application?
+3. What is the primary function of the application?
+4. What is required to access all the recordings in the application?
+5. What type of interface is used for signing in to access recordings?
+6. What is the purpose of connecting to a Zoom account initially?
+7. What is the name of the hackathon where the application is being presented?
+8. What is the name of the module used for connecting with a large language model?
+9. What is the name of the technology used for inference in the application?
+10. What is the expected outcome of signing in from the Zoom interface?

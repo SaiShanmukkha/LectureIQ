@@ -1,4 +1,4 @@
-from flask import Flask, flash, render_template, request, session, url_for, redirect
+from flask import Flask, flash, render_template, request, session, url_for, redirect, jsonify
 from dotenv import load_dotenv
 import os, urllib, requests, logging
 from datetime import datetime
@@ -289,6 +289,26 @@ def manual_proofread():
     if proofread_transcript:
         return render_template("manual_proofread.html", transcript=proofread_transcript)
     return redirect(url_for('getAudioTranscript'))
+
+@app.route('/save_questions', methods=['GET', 'POST'])
+def save_questions():
+    # Retrieve questions from session
+    questions = session.get("questions", None)
+
+    if questions is None:
+        return jsonify({"status": "error", "message": "No questions were found in the session"}), 404
+
+    try:
+        # Save questions to a text file
+        with open("questions.txt", "w") as file:
+            if isinstance(questions, list):
+                file.write("\n".join(questions))
+            else:
+                file.write(str(questions))
+
+        return jsonify({"status": "success", "message": "Questions saved to questions.txt"}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": f"Failed to save questions: {str(e)}"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

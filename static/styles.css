@@ -160,7 +160,7 @@ footer {
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 
-footer button {
+button {
     padding: 15px 30px;
     font-size: 1rem;
     font-weight: bold;
@@ -173,12 +173,12 @@ footer button {
     margin: 0 10px;
 }
 
-footer button:disabled {
+button:disabled {
     background-color: grey;
     cursor: not-allowed;
 }
 
-footer button:hover:enabled {
+button:hover:enabled {
     background-color: #555;
 }
 
