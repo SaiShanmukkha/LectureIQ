@@ -24,17 +24,21 @@
     </main>
     <footer>
         <button id="skipButton" onclick="skipTranscript()">Skip</button>
-        <button id="chatButton" onclick="generateQuestions()" disabled>Generate Questions</button>
+        <button id="generate_questions" onclick="generateQuestions()" disabled>Generate Questions</button>
+        <!-- <button id="chatButton" onclick="">Chat</button> -->
+        <button id="chatButton" onclick="window.location.href='/chat'">Chat</button>
+
+
     </footer>
 
     <script>
         const editableTranscript = document.getElementById('editableTranscript');
-        const chatButton = document.getElementById('chatButton');
+        const generate_questions = document.getElementById('generate_questions');
         // @ts-ignore
         const originalTranscript = {{ transcript|tojson|safe }};
 
         editableTranscript.addEventListener('input', function() {
-            chatButton.disabled = false;
+            generate_questions.disabled = false;
         });
 
         function skipTranscript() {
@@ -50,6 +54,21 @@
                 }
             });
         }
+
+        // function chatWithTranscript() {
+        //     const editedTranscript = editableTranscript.value;
+        //     fetch('{{ url_for("chat") }}', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify({ transcript: editedTranscript })
+        //     }).then(response => {
+        //         if (response.ok) {
+        //             window.location.href = '{{ url_for("print_pdf") }}'; // Redirect to the next page
+        //         }
+        //     });
+        // }
 
         function generateQuestions() {
             const editedTranscript = editableTranscript.value;

@@ -1,4 +1,4 @@
-from flask import Flask, flash, render_template, request, session, url_for, redirect, jsonify
+from flask import Flask, flash, render_template, request, session, url_for, Response, redirect, jsonify
 from dotenv import load_dotenv
 import os, urllib, requests, logging
 from datetime import datetime
@@ -299,16 +299,25 @@ def save_questions():
         return jsonify({"status": "error", "message": "No questions were found in the session"}), 404
 
     try:
-        # Save questions to a text file
-        with open("questions.txt", "w") as file:
-            if isinstance(questions, list):
-                file.write("\n".join(questions))
-            else:
-                file.write(str(questions))
+        # Create the content for the file
+        if isinstance(questions, list):
+            file_content = "\n".join(questions)
+        else:
+            file_content = str(questions)
 
-        return jsonify({"status": "success", "message": "Questions saved to questions.txt"}), 200
+        # Return the file as a downloadable response
+        return Response(
+            file_content,
+            mimetype="text/plain",
+            headers={"Content-Disposition": "attachment;filename=questions.txt"}
+        )
     except Exception as e:
         return jsonify({"status": "error", "message": f"Failed to save questions: {str(e)}"}), 500
+
+@app.route('/chat', methods=['GET', 'POST'])
+def chat():
+    # questions=session.get('questions', '')
+    return render_template('chat.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
