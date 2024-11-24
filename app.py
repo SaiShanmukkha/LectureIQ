@@ -14,7 +14,8 @@ from llama_index.core import VectorStoreIndex
 from llama_index.core import Document
 from llama_index.core import Settings
 from llama_index.llms.openai import OpenAI
-from groq import Groq
+# from groq import Groq
+from llama_index.llms.groq import Groq
 
 load_dotenv()
 
@@ -32,12 +33,14 @@ ZOOM_TOKEN_API = 'https://zoom.us/oauth/token'
 
 client = Groq(
     api_key=os.environ.get("GROQ_API_KEY"),
+    model="llama-3.2-11b-vision-preview", 
+    temperature=0.2
 )
 
 # Initialize LlamaIndex components
 # llm_predictor = LLMPredictor(llm=OpenAI(temperature=0.0, model="gpt-4"))
 # service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
-Settings.llm = OpenAI(temperature=0.2, model="gpt-4")
+Settings.llm = client
 
 def expert_proofread_large_transcript(transcript):
     # Create a Document object with the transcript text
