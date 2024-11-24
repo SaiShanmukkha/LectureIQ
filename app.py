@@ -314,10 +314,68 @@ def save_questions():
     except Exception as e:
         return jsonify({"status": "error", "message": f"Failed to save questions: {str(e)}"}), 500
 
+@app.route('/save_editable_transcript', methods=['GET', 'POST'])
+def save_editable_transcript():
+    data = request.get_json()
+    if not data or 'transcript' not in data:
+        app.logger.debug('No transcript data received')
+        return 'Bad Request', 400
+
+    transcript = data['transcript']
+    app.logger.debug(f'Transcript received: {transcript}')
+    # questions=session.get('questions', '')
+    # return render_template('chat.html')
+    session["edited_transcript"] = transcript
+    return transcript
+
+# @app.route('/chat_interface')
+
 @app.route('/chat', methods=['GET', 'POST'])
 def chat():
-    # questions=session.get('questions', '')
+    if request.method == 'POST':
+        user_message = request.json.get('message', '').strip()
+
+        if not user_message:
+            return jsonify({"response": "Please type a message."}), 200
+
+        # Retrieve the context (edited transcript) from the session
+        edited_transcript = session.get('edited_transcript', '')
+
+        # Generate a context-aware response
+        response = generate_response(user_message, edited_transcript)
+
+        return jsonify({"response": response}), 200
+
     return render_template('chat.html')
+
+def generate_response(user_message, context):
+    """
+    Generate a context-aware response to the user's message using the Groq client.
+    Args:
+        user_message (str): The message sent by the user.
+        context (str): The context (e.g., edited transcript).
+    Returns:
+        str: The chatbot's response.
+    """
+    # Construct the messages list with context and user message
+    messages = [
+        {"role": "system", "content": f"Context: {context}.\n You will answer based on the context based on user's question. You will be a normal friendly chatbot."},
+        {"role": "user", "content": user_message}
+    ]
+
+    # Generate the response using the Groq client
+    try:
+        response = client1.chat.completions.create(
+            model="llama3-70b-8192",
+            messages=messages,
+            max_tokens=100,
+            temperature=1.2
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        app.logger.error(f"Error generating response: {e}")
+        return "I'm sorry, but I couldn't generate a response at this time."
+
 
 if __name__ == '__main__':
     app.run(debug=True)

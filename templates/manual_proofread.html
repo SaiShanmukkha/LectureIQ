@@ -25,8 +25,8 @@
     <footer>
         <button id="skipButton" onclick="skipTranscript()">Skip</button>
         <button id="generate_questions" onclick="generateQuestions()" disabled>Generate Questions</button>
-        <!-- <button id="chatButton" onclick="">Chat</button> -->
-        <button id="chatButton" onclick="window.location.href='/chat'">Chat</button>
+        <button id="chatButton" onclick="save_editable_transcript_in_session()">Chat</button>
+        <!-- <button id="chatButton" onclick="window.location.href='/chat_'">Chat</button> -->
 
 
     </footer>
@@ -55,20 +55,20 @@
             });
         }
 
-        // function chatWithTranscript() {
-        //     const editedTranscript = editableTranscript.value;
-        //     fetch('{{ url_for("chat") }}', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({ transcript: editedTranscript })
-        //     }).then(response => {
-        //         if (response.ok) {
-        //             window.location.href = '{{ url_for("print_pdf") }}'; // Redirect to the next page
-        //         }
-        //     });
-        // }
+        function save_editable_transcript_in_session() {
+            const editedTranscript = editableTranscript.value;
+            fetch('{{ url_for("save_editable_transcript") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ transcript: editedTranscript })
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = '{{ url_for("chat") }}'; // Redirect to the next page
+                }
+            });
+        }
 
         function generateQuestions() {
             const editedTranscript = editableTranscript.value;

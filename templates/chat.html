@@ -1,1 +1,57 @@
-<h1>Welcome to chat</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/chat-styles.css">
+    <title>LLM Chat Application</title>
+</head>
+<body>
+    <div class="chat-container">
+        <h1>LLM Chat Application</h1>
+        <div id="chat-box">
+            <!-- Chat messages will appear here -->
+        </div>
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+    <script>
+        const chatBox = document.getElementById("chat-box");
+        const userInput = document.getElementById("user-input");
+        const sendButton = document.getElementById("send-button");
+
+        function addMessageToChat(message, isUser = false) {
+            const messageDiv = document.createElement("div");
+            messageDiv.className = isUser ? "user-message" : "bot-message";
+            messageDiv.textContent = message;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        sendButton.addEventListener("click", async () => {
+            const message = userInput.value.trim();
+            if (message) {
+                addMessageToChat(message, true);
+                userInput.value = "";
+
+                const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message }),
+                });
+
+                const data = await response.json();
+                addMessageToChat(data.response);
+            }
+        });
+
+        userInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                sendButton.click();
+            }
+        });
+    </script>
+</body>
+</html>
