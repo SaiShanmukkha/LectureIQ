@@ -14,7 +14,7 @@ from llama_index.core import VectorStoreIndex
 from llama_index.core import Document
 from llama_index.core import Settings
 from llama_index.llms.openai import OpenAI
-# from groq import Groq
+from groq import Groq as OrgGroq
 from llama_index.llms.groq import Groq
 
 load_dotenv()
@@ -36,7 +36,7 @@ client = Groq(
     model="llama-3.2-11b-vision-preview", 
     temperature=0.2
 )
-
+client1 = OrgGroq()
 # Initialize LlamaIndex components
 # llm_predictor = LLMPredictor(llm=OpenAI(temperature=0.0, model="gpt-4"))
 # service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
@@ -57,6 +57,8 @@ def expert_proofread_large_transcript(transcript):
         "You are an expert transcript proofreader who has proofread many English texts "
         "written by both native and non-native English speakers. Please proofread the following text:\n\n"
         "{text}"
+        "Instructions for output: \n"
+        "1. You will only output the proofread text, do not include anything else in the transcript"
     )
     
     # Execute the query with the proofreading prompt
@@ -208,9 +210,21 @@ def getTranscript():
         if file.get('file_type') == "M4A":
             download_link = f'{file.get("download_url")}?access_token={token["access_token"]}&playback_access_token={recordings_json.get("recording_play_passcode")}'
             local_file = download_audio_file(download_link, "local_file.m4a")
-            model = whisper.load_model("base")
-            result = model.transcribe(local_file)
-            transcript = result["text"]
+            # model = whisper.load_model("base")
+            # result = model.transcribe(local_file)
+            # transcript = result["text"]
+            file_path=os.path.abspath('local_file.m4a')
+            print(file_path)
+            # file_name = file_path + ''
+            model = client1
+            with open(file_path, "rb") as file:
+                create_transcript = model.audio.transcriptions.create(
+                    file=(file_path, file.read()),
+                    model="whisper-large-v3-turbo",
+                    temperature=0.0
+                )
+            print(create_transcript.text)
+            transcript = create_transcript.text
             expertly_proofread_transcript = expert_proofread_large_transcript(transcript)
             app.logger.debug(f'Transcribed text: {expertly_proofread_transcript}')
             session['proofread_transcript'] = expertly_proofread_transcript
